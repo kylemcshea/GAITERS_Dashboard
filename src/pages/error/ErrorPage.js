@@ -1,23 +1,21 @@
-import React from "react";
-import { Container } from "reactstrap";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import s from "./ErrorPage.module.scss";
-import errorImg from "../../images/error-page-img.svg";
 
 class ErrorPage extends React.Component {
+  static propTypes = {
+    error: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      message: PropTypes.string.isRequired,
+      stack: PropTypes.string.isRequired,
+    }).isRequired,
+  };
+
   render() {
     return (
-      <div className={s.errorPage}>
-        <Container>
-          <img src={errorImg} alt="error" />
-          <div className={`${s.errorContainer}`}>
-            <h1 className={s.errorInfo}>404</h1>
-            <p className={s.errorHelp}>
-              We’re working on it and we’ll get it fixed as soon as possible.
-            </p>
-            <p className={s.errorHelp}>You can back or use our Help Center</p>
-          </div>
-        </Container>
+      <div>
+        <h1>Error</h1>
+        <p>Sorry, a critical error occurred on this page.</p>
       </div>
     );
   }

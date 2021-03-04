@@ -1,118 +1,60 @@
-import React from 'react';
-
-import {
-  Row, Col
-} from 'reactstrap';
+import React, { PureComponent } from 'react';
+import { Row, Col, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 
 import Widget from '../../components/Widget';
-import ApexChart from 'react-apexcharts';
 
-import s from './Charts.module.scss';
-import {chartData} from './mock';
+// Charts
+import LineChart from './charts/LineChart';
+import BarChart from './charts/BarChart';
+import PercentAreaChart from './charts/PercentAreaChart';
+import PieChart from './charts/PieChart';
 
-import ReactEchartsCore from 'echarts-for-react/lib/core';
- 
-import echarts from 'echarts/lib/echarts';
+const data = [
+  {name: 'Page A', uv: 4000, pv: 2400, amt: 2400},
+  {name: 'Page B', uv: 3000, pv: 1398, amt: 2210},
+  {name: 'Page C', uv: 2000, pv: 9800, amt: 2290},
+  {name: 'Page D', uv: 2780, pv: 3908, amt: 2000},
+  {name: 'Page E', uv: 1890, pv: 4800, amt: 2181},
+  {name: 'Page F', uv: 2390, pv: 3800, amt: 2500},
+  {name: 'Page G', uv: 3490, pv: 4300, amt: 2100},
+];
 
-import 'echarts/lib/chart/line';
-import 'echarts/lib/chart/pie';
-import 'echarts/lib/chart/themeRiver';
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/legend';
-
-class Charts extends React.Component {
-
-  state = {
-    cd: chartData,
-    initEchartsOptions: {
-      renderer: 'canvas'
-    },
-
-  }
-
+export default class Charts extends PureComponent {
   render() {
-    const { cd, initEchartsOptions } = this.state
-    return (
-      <div className={s.root}>
-        <div>
-          <Row>
-            <Col lg={7} xs={12}>
-              <Widget
-                title={<p style={{ fontWeight: 700 }}>Apex</p>}
-                customDropDown
-              >
-                <ApexChart 
-                  className="sparkline-chart"
-                  height={350} 
-                  series={cd.apex.column.series}
-                  options={cd.apex.column.options}
-                  type={"bar"}
-                />
-              </Widget>
-            </Col>
-            <Col lg={5} xs={12}>
-              <Widget
-                title={<p style={{ fontWeight: 700 }}>Echarts Line Chart</p>}
-                customDropDown
-              >
-                <ReactEchartsCore
-                  echarts={echarts}
-                  option={cd.echarts.line}
-                  opts={initEchartsOptions}
-                  style={{height: "365px"}}
-                />
-              </Widget>
-            </Col>
-            <Col lg={12} xs={12}>
-              <Row>
-                <Col lg={6} xs={12}>
-                  <Widget
-                    title={<p style={{ fontWeight: 700 }}>Apex <span className="fw-semi-bold">Monochrome Pie</span></p>}
-                    customDropDown
-                  >
-                    <ApexChart 
-                      className="sparkline-chart"
-                      type={"pie"} 
-                      height={200} 
-                      series={cd.apex.pie.series}
-                      options={cd.apex.pie.options}
-                    />
-                  </Widget>
-                </Col>
-                <Col lg={6} xs={12}>
-                  <Widget
-                    title={<p style={{ fontWeight: 700 }}>Chart <span className="fw-semi-bold">Donut Chart</span></p>}
-                    customDropDown
-                  >
-                    <ReactEchartsCore
-                      echarts={echarts}
-                      option={cd.echarts.donut}
-                      opts={initEchartsOptions}
-                      style={{height: "170px"}}
-                    />
-                  </Widget>
-                </Col>
-              </Row>
-            </Col>
-            <Col lg={12} xs={12}>
-              <Widget
-                title={<p style={{ fontWeight: 700 }}>Echarts <span className="fw-semi-bold">River Chart</span></p>}
-                customDropDown
-              >
-                <ReactEchartsCore
-                  echarts={echarts}
-                  option={cd.echarts.river}
-                  opts={initEchartsOptions}
-                  style={{height: "350px"}}
-                />
-              </Widget>
-            </Col>
-          </Row>
-        </div>
+    return(
+      <div>
+        <Breadcrumb>
+          <BreadcrumbItem>YOU ARE HERE</BreadcrumbItem>
+          <BreadcrumbItem active>Charts</BreadcrumbItem>
+        </Breadcrumb>
+        <h1 className="page-title mb-lg">Pretty <span className="fw-semi-bold">Charts</span></h1>
+        <Row>
+          <Col xs={12} md={6}>
+            <Widget
+              title={<h5>Simple <span className="fw-semi-bold">Line Chart</span></h5>}>
+              <LineChart data={data} />
+            </Widget>
+          </Col>
+          <Col xs={12} md={6}>
+            <Widget
+              title={<h5>Simple <span className="fw-semi-bold">Bar Chart</span></h5>}>
+              <BarChart data={data} />
+            </Widget>
+          </Col>
+          <Col xs={12}>
+            <Widget
+              title={<h5>Percent <span className="fw-semi-bold">Area Chart</span></h5>}>
+              <PercentAreaChart data={data} />
+            </Widget>
+          </Col>
+          <Col xs={12} md={6}>
+            <Widget
+              title={<h5>Pie <span className="fw-semi-bold">Chart</span></h5>}>
+              <PieChart />
+            </Widget>
+          </Col>
+        </Row>
       </div>
-    );
+    )
   }
-
 }
-
-export default Charts;

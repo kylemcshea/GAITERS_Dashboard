@@ -5,7 +5,7 @@
     .location-selector {
       width: 100%;
       height: 220px;
-      border: 1px dotted theme-color("warning");
+      border: 1px dashed #bbb;
       background-color: $white;
       position: relative;
     }
@@ -13,13 +13,13 @@
     .location-selector .bit {
       @include transition(background-color 0.15s ease-in-out);
 
-      background-color: rgba(255, 173, 1, 0.3);
+      background-color: $gray-300;
       cursor: pointer;
       position: absolute;
     }
 
     .location-selector .bit:hover {
-      background-color: theme-color("warning");
+      background-color: $gray-400;
     }
 
     .location-selector .bit.top,
@@ -52,5 +52,6 @@
     .location-selector .bit.left {
       left: 0;
     }
+
   }
 }

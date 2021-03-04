@@ -1,27 +1,4 @@
-const hostApi = process.env.NODE_ENV === "development" ? "http://localhost" : "https://flatlogic-node-backend.herokuapp.com";
-const portApi = process.env.NODE_ENV === "development" ? 8080 : "";
-const baseURLApi = `${hostApi}${portApi ? `:${portApi}` : ``}`;
-
 export default {
-  hostApi,
-  portApi,
-  baseURLApi,
-  remote: "https://flatlogic-node-backend.herokuapp.com",
   isBackend: process.env.REACT_APP_BACKEND,
-  auth: {
-    email: 'admin@flatlogic.com',
-    password: 'password'
-  },
-  app: {
-    colors: {
-      dark: "#323232",
-      light: "#FFFFFF",
-    },
-    themeColors: {
-      warning: '#FEBE69',
-      danger: '#FF7769',
-      success: '#81D4BB',
-      info: '#4DC7DF'
-    }
-  }
+  id_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpmYWxzZSwibG9naW4iOiJ1c2VyIiwiaWF0IjoxNTczNzQ4ODI1LCJleHAiOjE2MjA0MDQ4MjV9.Jd1Trqu6izHq2R3uw4enrDlQKG4mzZdipSMdYQD_9JM'
 };

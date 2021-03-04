@@ -1,228 +1,96 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { NavLink } from "react-router-dom";
-import { Collapse, Badge } from "reactstrap";
-import { Route } from "react-router";
-import classnames from "classnames";
+import React, {Component} from 'react';
+import cx from 'classnames';
+import PropTypes from 'prop-types';
+import { NavLink } from 'react-router-dom';
+import { Collapse } from 'reactstrap';
+import { Route } from 'react-router';
 
-import caret from '../../../images/caret.svg'
-import activeCaret from '../../../images/caret-active.svg'
+import Icon from '../../Icon/Icon';
 
-import s from "./LinksGroup.module.scss";
+import s from './LinksGroup.module.scss';
 
 class LinksGroup extends Component {
   /* eslint-disable */
   static propTypes = {
     header: PropTypes.node.isRequired,
-    link: PropTypes.string.isRequired,
+    headerLink: PropTypes.string,
     childrenLinks: PropTypes.array,
-    iconName: PropTypes.string,
+    glyph: PropTypes.string,
     className: PropTypes.string,
-    badge: PropTypes.string,
-    label: PropTypes.string,
-    activeItem: PropTypes.string,
-    isHeader: PropTypes.bool,
-    index: PropTypes.string,
-    deep: PropTypes.number,
-    onActiveSidebarItemChange: PropTypes.func,
-    labelColor: PropTypes.string,
-    exact: PropTypes.bool
   };
   /* eslint-enable */
 
   static defaultProps = {
-    link: "",
+    headerLink: null,
     childrenLinks: null,
-    className: "",
-    isHeader: false,
-    deep: 0,
-    activeItem: "",
-    label: "",
-    exact: true
+    className: '',
+    glyph: null,
   };
 
   constructor(props) {
     super(props);
-    this.togglePanelCollapse = this.togglePanelCollapse.bind(this);
 
     this.state = {
-      headerLinkWasClicked: true
+      isOpen: false,
     };
   }
 
-  togglePanelCollapse(link) {
-      this.props.onActiveSidebarItemChange(link);
-      this.setState({
-          headerLinkWasClicked: !this.state.headerLinkWasClicked ||
-              (this.props.activeItem && !this.props.activeItem.includes(this.props.index)),
-      });
-  }
-
   render() {
-    const isOpen =
-      this.props.activeItem &&
-      this.props.activeItem.includes(this.props.index) &&
-      this.state.headerLinkWasClicked;
-
-    const { exact } = this.props.exact;
-
-    if (!this.props.link) {
+    const { className, childrenLinks, headerLink, header, glyph } = this.props;
+    const { isOpen } = this.state;
+    if (!childrenLinks) {
       return (
-        <li
-          className={classnames(
-            "link-wrapper",
-            s.headerLink,
-            this.props.className
-          )}
-          onClick={this.props.onClick}
-        >
+        <li className={cx(s.headerLink, className)}>
           <NavLink
-            to={this.props.link}
-            exact={exact}
-            target={this.props.target}
-          >
-            {this.props.children}
-            {this.props.header}{" "}
-            {this.props.label && (
-              <sup
-                className={`${s.headerLabel} ${s.headerUpdate} text-${this.props
-                  .labelColor || "warning"}`}
-              >
-                {this.props.label}
-              </sup>
-            )}
-            {this.props.badge && (
-              <Badge className={s.badge} pill>
-                9
-              </Badge>
-            )}
-          </NavLink>
-        </li>
-      );
-    }
-
-    if (!this.props.childrenLinks) {
-      if (this.props.isHeader) {
-        return (
-          <li
-            className={classnames(
-              "link-wrapper",
-              s.headerLink,
-              this.props.className
-            )}
-          >
-            <NavLink
-              to={this.props.link}
-              activeClassName={s.headerLinkActive}
-              exact={exact}
-              target={this.props.target}
-            >
-              {this.props.children}
-              {this.props.header}{" "}
-              {this.props.label && (
-                <sup
-                  className={`${s.headerLabel} ${s.headerUpdate} text-${this
-                    .props.labelColor || "warning"}`}
-                >
-                  {this.props.label}
-                </sup>
-              )}
-              {this.props.badge && (
-                <Badge className={s.badge} pill>
-                  9
-                </Badge>
-              )}
-            </NavLink>
-          </li>
-        );
-      }
-      return (
-        <li>
-          <NavLink
-            to={this.props.link}
+            to={headerLink}
             activeClassName={s.headerLinkActive}
-            style={{ paddingLeft: `${60 + 10 * (this.props.deep - 1)}px` }}
-            onClick={e => {
-              // able to go to link is not available(for Demo)
-              if (this.props.link.includes("menu")) {
-                e.preventDefault();
-              }
-            }}
-            exact={exact}
+            exact
           >
-            {this.props.header}{" "}
-            {this.props.label && (
-              <sup
-                className={`${s.headerLabel} text-${this.props.labelColor ||
-                  "warning"}`}
-              >
-                {this.props.label}
-              </sup>
-            )}
+            <div>
+              {glyph && <Icon glyph={glyph} />}
+              <span>{header}</span>
+            </div>
           </NavLink>
         </li>
       );
     }
-
     /* eslint-disable */
     return (
       <Route
-        path={this.props.link}
-        children={params => {
-          const { match } = params;
+        path={headerLink}
+        children={({match}) => {
           return (
-            <li
-              className={classnames(
-                "link-wrapper",
-                { [s.headerLink]: this.props.isHeader },
-                this.props.className
-              )}
-            >
+            <li className={cx(s.headerLink, className)}>
               <a
-                className={classnames(
-                  { [s.headerLinkActive]: match },
-                  { [s.collapsed]: isOpen },
-                  "d-flex"
-                )}
-                onClick={() => this.togglePanelCollapse(this.props.link)}
+                className={cx({[s.headerLinkActive]: !!match && match.url.indexOf(headerLink) !== -1 })}
+                onClick={() => this.setState({isOpen: !isOpen})}
               >
-                {this.props.isHeader ? (
-                  <>
-                    {this.props.children}
-                  </>
-                ) : null}
-                {this.props.header}{" "}
-                {this.props.label && (
-                  <sup
-                    className={`${s.headerLabel} ${
-                      s.headerNode
-                    } ml-1 text-${this.props.labelColor || "warning"}`}
-                  >
-                    {this.props.label}
-                  </sup>
-                )}
-                { isOpen ?
-                  <img src={activeCaret} className={`${s.activeCaret}`} /> : <img className={`${s.caret}`} src={caret}/>
-                }
+                <div>
+                  {glyph && <Icon glyph={glyph} />}
+                  <span>{header}</span>
+                </div>
+                <b className={cx('fa fa-angle-left arrow', s.arrow, {[s.arrowActive]: isOpen})} />
               </a>
               {/* eslint-enable */}
               <Collapse className={s.panel} isOpen={isOpen}>
                 <ul>
-                  {this.props.childrenLinks &&
-                    this.props.childrenLinks.map((child, ind) => (
-                      <LinksGroup
-                        onActiveSidebarItemChange={
-                          this.props.onActiveSidebarItemChange
+                  {childrenLinks &&
+                  childrenLinks.map(child => (
+                    <li key={child.name}>
+                      <NavLink
+                        to={child.link}
+                        exact
+                        onClick={() =>
+                          this.setState({
+                            isOpen: true,
+                          })
                         }
-                        activeItem={this.props.activeItem}
-                        header={child.header}
-                        link={child.link}
-                        index={child.index}
-                        childrenLinks={child.childrenLinks}
-                        deep={this.props.deep + 1}
-                        key={ind} // eslint-disable-line
-                      />
-                    ))}
+                        activeClassName={s.headerLinkActive}
+                      >
+                        {child.name}
+                      </NavLink>
+                    </li>
+                  ))}
                 </ul>
               </Collapse>
             </li>
